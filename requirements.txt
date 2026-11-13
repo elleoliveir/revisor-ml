@@ -1,2 +1,3 @@
 nbformat
 pytest
+langchain-ollama
