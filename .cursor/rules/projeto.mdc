@@ -1,0 +1,36 @@
+---
+description: Contexto fixo do projeto Revisor de pipelines de ML
+alwaysApply: true
+---
+
+# Sobre o projeto
+Sistema que recebe um notebook (.ipynb) ou script (.py) de treino de machine learning e devolve um relatório
+com problemas metodológicos: o trecho do código, a gravidade e como corrigir.
+
+Princípio central: verificações determinísticas em Python fazem o trabalho pesado; o LLM só interpreta,
+descarta falsos positivos e explica. Nunca dependa do LLM para algo que uma regra resolve.
+
+# Stack
+- Python 3.11+, ambiente virtual em .venv (Windows)
+- Parser: módulos `ast` e `nbformat`
+- Agentes: LangGraph + langchain-ollama (modelo padrão `qwen2.5:7b`, trocável por variável de ambiente `REVISOR_MODEL`)
+- Interface: Streamlit
+- Testes: pytest
+
+# Estrutura
+- `revisor/parser.py` lê .py e .ipynb
+- `revisor/checks/` uma verificação por arquivo, todas devolvendo `Finding`
+- `revisor/graph.py` grafo de agentes (planner → tools → reviewer → writer)
+- `revisor/prompts.py` prompts dos agentes
+- `revisor/report.py` gera o relatório em Markdown
+- `eval/` notebooks de avaliação, `gabarito.json` e `run_eval.py`
+- `tests/` testes com pytest
+
+# Como trabalhar comigo
+- Faça só a etapa que eu pedir. Não adiante etapas seguintes.
+- Escreva testes para toda função nova e rode `pytest` antes de dizer que terminou.
+- Código simples e legível; prefira funções pequenas a classes complexas.
+- Comentários e docstrings em português; nomes de variáveis e funções em inglês.
+- Não instale bibliotecas novas sem me perguntar; quando precisar, atualize `requirements.txt`.
+- Não apague nem reescreva arquivos que eu não mencionei.
+- No fim de cada etapa, me diga em poucas linhas o que foi criado e como testar, e sugira uma mensagem de commit.
